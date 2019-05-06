@@ -11,14 +11,14 @@ import javax.swing.JTextField;
 public class Zombies extends JFrame{
 
 	/**
-	 * This program is a top-down zombie-shooting game. 
+	 * This program is a top-down zombie-shooting game.
 	 *
 	 *Written By: Jeremy Kun
 	 *current version: 1.1
 	 */
 	private static final long serialVersionUID = -4089174658070026670L;
 	byte me;
-	
+
 	JTextField jtfBox,jtfTime;
 	GamePanel gp;
 	protected static GraphicsEnvironment gfxEnv = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -27,50 +27,50 @@ public class Zombies extends JFrame{
 	protected static DisplayMode[] displayModes = defaultScreenDevice.getDisplayModes();
 	static int pWidth;
 	static int pHeight;
-	static boolean windowed = false;
-	
+	static boolean windowed = true;
+
 	protected DisplayMode newDisplayMode = null;
-	
-	private static DisplayMode[] requestedDisplayModes = new DisplayMode[] 
+
+	private static DisplayMode[] requestedDisplayModes = new DisplayMode[]
     {
 	       new DisplayMode(1280, 1024,32, 60)
 	};
-	
-	
-	
+
+
+
 	public Zombies() {
 		setTitle("Zombies"); // title of JFrame
- 	    pack();   // first one (the GUI doesn't include the JPanel yet) 
+ 	    pack();   // first one (the GUI doesn't include the JPanel yet)
  	    Container c = getContentPane();
  	    // default layout of JFrame's contentPane is BorderLayout
  	    gp = new GamePanel(this, pWidth, pHeight); // create the playing area
  	    //pWidth = 100; pHeight = 100;
  	    //gp.setPreferredSize(new Dimension(pWidth, pHeight));
- 	    c.add(gp, "Center");	// add playing area to center of JFrame 
+ 	    c.add(gp, "Center");	// add playing area to center of JFrame
  	    pack();  // second, after JPanel added - uses size of play are to control Frame size
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
  	    setResizable(false);
  	    setLocation(100,100);
  	    setVisible(true);
 	}
-	
+
 	public Zombies(String title, DisplayMode mode) throws HeadlessException
 	{
 		super(title);
 		System.out.println("Entering the following video mode:");
 		printDisplayMode(mode);
-		
+
 		newDisplayMode = mode;
-		
+
 		setUndecorated(true);
-		setIgnoreRepaint(true);   	
-		setupWindowListener();   
-		setupKeyListener();   
-  		
+		setIgnoreRepaint(true);
+		setupWindowListener();
+		setupKeyListener();
+
 		Container c = getContentPane();
  	    gp = new GamePanel(this, pWidth, pHeight); // create the playing area
- 	    c.add(gp, "Center");	
-		
+ 	    c.add(gp, "Center");
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
  	    setResizable(false);
  	    setVisible(true);
@@ -82,7 +82,7 @@ public class Zombies extends JFrame{
 		for(int mIndex=0; mIndex < displayModes.length; mIndex++)
 			printDisplayMode(displayModes[mIndex]);
 	}
-	
+
 	public static void printDisplayMode(DisplayMode mode)
 	{
 		System.out.println(
@@ -91,7 +91,7 @@ public class Zombies extends JFrame{
 			"x" + mode.getBitDepth()+
 			"@" + mode.getRefreshRate());
 	}
-	
+
 	public static DisplayMode findRequestedMode()
 	{
 		DisplayMode best = null;
@@ -132,46 +132,46 @@ public class Zombies extends JFrame{
 		// no matching modes so we return null
 		return best;
 	}
-	
-	protected void exitForm(java.awt.event.WindowEvent evt) 
+
+	protected void exitForm(java.awt.event.WindowEvent evt)
 	{
 		// make sure we restore the video mode before exiting
 		initFromScreen();
-		
+
 		// force the program to exit
 		System.exit(0);
 	}
-	
-	public void initFromScreen() 
+
+	public void initFromScreen()
 	{
 			defaultScreenDevice.setFullScreenWindow(null);
 	}
-	
-	public void initToScreen() 
+
+	public void initToScreen()
 	{
 		pack();
-			// set this Frame as a full screen window 
-			defaultScreenDevice.setFullScreenWindow(this);
+			// set this Frame as a full screen window
+			defaultScreenDevice.setFullScreenWindow(this);
 			// change the video mode to the one we wanted
-			defaultScreenDevice.setDisplayMode(newDisplayMode);
+			defaultScreenDevice.setDisplayMode(newDisplayMode);
 	}
-	
-	private void setupWindowListener() 
+
+	private void setupWindowListener()
 	{
 		addWindowListener(new java.awt.event.WindowAdapter() {
 			public void windowClosing(java.awt.event.WindowEvent evt) {
 				exitForm(evt);
 			}
 		});
-        
+
 	}
-	public void setupKeyListener() 
+	public void setupKeyListener()
 	{
 		addKeyListener(new java.awt.event.KeyAdapter() {
 			public void keyPressed(java.awt.event.KeyEvent evt) {keyPressedHandler(evt);}
 		});
 	}
-	
+
 	public void keyPressedHandler(java.awt.event.KeyEvent evt) {
 		if(evt.getKeyCode()==java.awt.event.KeyEvent.VK_ESCAPE)
 		{
@@ -180,7 +180,7 @@ public class Zombies extends JFrame{
 			System.exit(0);
 		}
 	}
-	
+
 	public void restart(Zombies x){
 		x.dispose();
 		Zombies myFrame = null;
@@ -188,51 +188,52 @@ public class Zombies extends JFrame{
 			DisplayMode newMode = findRequestedMode();
 			myFrame = new Zombies("Zombies Full Screen Mode", newMode);
 			myFrame.initToScreen();
-		}	
+		}
 		else
 			myFrame = new Zombies();
 	}
-	
+
 	public static void main(String[] args) {
-		
+
 		//green out to toggle full screen
 		//windowed = true;
-		
+
 		DisplayMode newMode = null;
-		
+
 		// see if the user wants to force windowed mode
 		// even if full screen mode is available
 		boolean forceWindowedMode = false;
 		if(args.length >= 1)
 			if(args[0].equalsIgnoreCase("windowed"))
 				forceWindowedMode = true;
-		
+
     	// we need to make sure the system defualt display can
     	// support full screen mode, if it can't we will run
     	// in windowed mode
+        windowed = true;
     	boolean fullScreenMode = false;
-		if(defaultScreenDevice.isFullScreenSupported())
-		{
-			System.out.println("full screen is supported");
-			fullScreenMode = true;
-			
-			// try to get one of the modes we really want
-			newMode = findRequestedMode();
-		
-			// if the mode doesn't exist then go into windowed mode
-			// otherwise use full screen mode
-			pWidth = newMode.getWidth();
-			pHeight = newMode.getHeight();
-			if(newMode==null)
-				fullScreenMode = false;
-			else
-				System.out.print("Best full screen mode is : "); printDisplayMode(newMode);
-		}
-		else
-			System.out.println("This system doesn't support full screen mode.");
-			
+		// if(defaultScreenDevice.isFullScreenSupported())
+		// {
+		// 	System.out.println("full screen is supported");
+		// 	fullScreenMode = true;
+
+		// 	// try to get one of the modes we really want
+		// 	newMode = findRequestedMode();
+
+		// 	// if the mode doesn't exist then go into windowed mode
+		// 	// otherwise use full screen mode
+		// 	pWidth = newMode.getWidth();
+		// 	pHeight = newMode.getHeight();
+		// 	if(newMode==null)
+		// 		fullScreenMode = false;
+		// 	else
+		// 		System.out.print("Best full screen mode is : "); printDisplayMode(newMode);
+		// }
+		// else
+		// 	System.out.println("This system doesn't support full screen mode.");
+
 		Zombies myFrame = null;
-		
+
 		//ungreen to enable full screen mode
 		if(windowed)
 		{
