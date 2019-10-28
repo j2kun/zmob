@@ -33,7 +33,7 @@ public class Zombies extends JFrame{
 
 	private static DisplayMode[] requestedDisplayModes = new DisplayMode[]
     {
-	       new DisplayMode(1280, 1024,32, 60)
+	       new DisplayMode(1280, 1024,32, 60)
 	};
 
 
@@ -237,8 +237,8 @@ public class Zombies extends JFrame{
 		//ungreen to enable full screen mode
 		if(windowed)
 		{
-			pWidth = 1000;
-			pHeight = 800;
+			pWidth = 1920;
+			pHeight = 1080;
 			new Zombies();
 		}
 		else if(fullScreenMode && !forceWindowedMode)
