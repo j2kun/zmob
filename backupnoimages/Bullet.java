@@ -233,8 +233,9 @@ public class Bullet {
          * Wave beam
          *
 		 * To rotate a point x,y to an angle theta, multiply the matrices
-		 * [cos(theta), -sin(th)] * [t] where t is the frame #
-		 * [sin(theta),  cos(th)]   [y] where y = sin(t)
+         *
+		 * [cos(theta), -sin(theta)] * [t] where t is the frame #
+		 * [sin(theta),  cos(theta)]   [y] where y = sin(t)
 		 *
 		 * to get x(rotated) = t*cos(theta) - sin(t)*sin(theta)
 		 *        y(rotated) = t*sin(theta) + sin(t)*cos(theta)
